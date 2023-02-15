@@ -4,6 +4,7 @@ package demo.EShopping.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Data
 @Entity
@@ -15,4 +16,10 @@ public class User {
     private String userName;
 
     private String password;
+
+    private String email;
+
+    private int birthDate;
+
+    private int age;
 }

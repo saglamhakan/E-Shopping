@@ -26,6 +26,9 @@ public class UserService {
         toSave.setUserId(newUser.getUserId());
         toSave.setUserName(newUser.getUserName());
         toSave.setPassword(newUser.getPassword());
+        toSave.setEmail(newUser.getEmail());
+        toSave.setAge(newUser.getAge());
+        toSave.setBirthDate(newUser.getBirthDate());
 
 
         return userRepository.save(toSave);
@@ -38,6 +41,9 @@ public class UserService {
             User founduser=user.get();
             founduser.setUserName(newUser.getUserName());
             founduser.setPassword(newUser.getPassword());
+            founduser.setBirthDate(newUser.getBirthDate());
+            founduser.setEmail(newUser.getEmail());
+            founduser.setAge(newUser.getAge());
             userRepository.save(founduser);
             return founduser;
         }else
