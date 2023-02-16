@@ -3,9 +3,7 @@ package demo.EShopping.requests;
 import lombok.Data;
 
 @Data
-public class GetUserRequest {
+public class DeleteUserRequest {
 
     private int userId;
-
-    private String userName;
 }

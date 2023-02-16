@@ -4,12 +4,13 @@ import demo.EShopping.requests.AddProductRequest;
 import demo.EShopping.requests.UpdateProductRequest;
 import demo.EShopping.entities.Product;
 import demo.EShopping.exception.ProductNotFoundException;
-import demo.EShopping.responses.ProductResponse;
+import demo.EShopping.responses.GetProductResponse;
 import demo.EShopping.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/products")
@@ -29,12 +30,12 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}")
-    public ProductResponse getProductById(@PathVariable int productId){
+    public GetProductResponse getProductById(@PathVariable int productId){
         Product product=productService.getByProductId(productId);
         if (product==null){
             throw new ProductNotFoundException("Product not available");
         }
-        return new ProductResponse(product);
+        return new GetProductResponse(product);
     }
 
     @PostMapping("/add")

@@ -5,7 +5,7 @@ import demo.EShopping.requests.AddUserRequest;
 import demo.EShopping.requests.UpdateUserRequest;
 import demo.EShopping.entities.User;
 import demo.EShopping.exception.UserNotFoundException;
-import demo.EShopping.responses.UserResponse;
+import demo.EShopping.responses.GetUserResponse;
 import demo.EShopping.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +27,12 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public UserResponse getOneUserById(@PathVariable int userId){
+    public GetUserResponse getOneUserById(@PathVariable int userId){
         User user=userService.getOneUserById(userId);
         if (user==null){
             throw new UserNotFoundException("User not available");
         }
-        return new UserResponse(user);
+        return new GetUserResponse(user);
 
     }
 

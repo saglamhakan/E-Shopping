@@ -1,14 +1,11 @@
 package demo.EShopping.service;
 
-import demo.EShopping.exception.UserNotFoundException;
 import demo.EShopping.requests.AddUserRequest;
 import demo.EShopping.requests.UpdateUserRequest;
 import demo.EShopping.dataAccess.UserRepository;
 import demo.EShopping.entities.User;
-import demo.EShopping.responses.UserResponse;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,5 +58,9 @@ public class UserService {
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    public User getOneUserByUserName(String userName) {
+        return userRepository.findByUserName(userName);
     }
 }

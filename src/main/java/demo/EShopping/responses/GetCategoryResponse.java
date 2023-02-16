@@ -4,11 +4,11 @@ import demo.EShopping.entities.Category;
 import lombok.Data;
 
 @Data
-public class CategoryResponse {
+public class GetCategoryResponse {
 
     private String categoryName;
 
-    public CategoryResponse(Category entity){
+    public GetCategoryResponse(Category entity){
         this.categoryName=entity.getCategoryName();
     }
 }

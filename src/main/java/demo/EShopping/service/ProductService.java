@@ -4,6 +4,7 @@ import demo.EShopping.requests.AddProductRequest;
 import demo.EShopping.requests.UpdateProductRequest;
 import demo.EShopping.dataAccess.ProductRepository;
 import demo.EShopping.entities.Product;
+import demo.EShopping.responses.GetProductResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -4,7 +4,7 @@ import demo.EShopping.requests.AddCategoryRequest;
 import demo.EShopping.requests.UpdateCategoryRequest;
 import demo.EShopping.entities.Category;
 import demo.EShopping.exception.CategoryNotFoundException;
-import demo.EShopping.responses.CategoryResponse;
+import demo.EShopping.responses.GetCategoryResponse;
 import demo.EShopping.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +27,12 @@ public class CategoryController {
     }
 
     @GetMapping("/{categoryId}")
-    public CategoryResponse getByCategoryId(@PathVariable int categoryId){
+    public GetCategoryResponse getByCategoryId(@PathVariable int categoryId){
         Category category=categoryService.getByCategoryId(categoryId);
         if (category==null){
             throw new CategoryNotFoundException("Category not available");
         }
-        return new  CategoryResponse(category);
+        return new GetCategoryResponse(category);
     }
 
 

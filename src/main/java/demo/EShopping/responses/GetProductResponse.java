@@ -5,7 +5,7 @@ import demo.EShopping.entities.Product;
 import lombok.Data;
 
 @Data
-public class ProductResponse {
+public class GetProductResponse {
 
     private String productName;
     private String colour;
@@ -14,7 +14,7 @@ public class ProductResponse {
 
     private Category category;
 
-    public ProductResponse(Product entity){
+    public GetProductResponse(Product entity){
         this.productName=entity.getProductName();
         this.productPrice=entity.getProductPrice();
         this.colour=entity.getColour();
