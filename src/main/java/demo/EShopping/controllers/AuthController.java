@@ -63,6 +63,9 @@ public class AuthController {
         AddUserRequest user = new AddUserRequest();
         user.setUserName(registerRequest.getUserName());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        user.setEmail(registerRequest.getEmail());
+        user.setBirthDate(registerRequest.getBirthDate());
+        user.setAge(registerRequest.getAge());
         userService.saveOneUser(user);
 
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(registerRequest.getUserName(), registerRequest.getPassword());

@@ -7,5 +7,8 @@ public class UserRequest {
 
  //   int userId;
     String userName;
+
     String password;
+
+
 }
