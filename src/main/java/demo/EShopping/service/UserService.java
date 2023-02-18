@@ -4,8 +4,11 @@ import demo.EShopping.requests.AddUserRequest;
 import demo.EShopping.requests.UpdateUserRequest;
 import demo.EShopping.dataAccess.UserRepository;
 import demo.EShopping.entities.User;
+import demo.EShopping.responses.GetUserResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +16,7 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
 
+    @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -56,8 +60,19 @@ public class UserService {
     }
 
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<GetUserResponse> getAllUsers() {
+
+        List<User> users=userRepository.findAll();
+        List<GetUserResponse> userResponses=new ArrayList<GetUserResponse>();
+
+        for (User user:users){
+            GetUserResponse foundUser=new GetUserResponse(user);
+            foundUser.setUserName(user.getUserName());
+
+            userResponses.add(foundUser);
+
+        }
+        return userResponses;
     }
 
     public User getOneUserByUserName(String userName) {

@@ -4,8 +4,10 @@ import demo.EShopping.requests.AddCategoryRequest;
 import demo.EShopping.requests.UpdateCategoryRequest;
 import demo.EShopping.dataAccess.CategoryRepository;
 import demo.EShopping.entities.Category;
+import demo.EShopping.responses.GetCategoryResponse;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,8 +19,19 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<Category> getAllCategory() {
-        return categoryRepository.findAll();
+    public List<GetCategoryResponse> getAllCategory() {
+
+        List<Category> categories = categoryRepository.findAll();
+        List<GetCategoryResponse> categoryResponses = new ArrayList<GetCategoryResponse>();
+
+        for (Category category:categories){
+            GetCategoryResponse foundCategory=new GetCategoryResponse(category);
+            foundCategory.setCategoryName(category.getCategoryName());
+
+            categoryResponses.add(foundCategory);
+        }
+
+        return categoryResponses;
     }
 
     public Category saveOneCategory(AddCategoryRequest newCategory) {

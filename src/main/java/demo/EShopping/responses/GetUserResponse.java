@@ -8,10 +8,10 @@ public class GetUserResponse {
 
     private String userName;
 
-    private int userId;
+  //  private int userId;
 
     public GetUserResponse(User entity){
         this.userName=entity.getUserName();
-        this.userId=entity.getUserId();
+      //  this.userId=entity.getUserId();
     }
 }

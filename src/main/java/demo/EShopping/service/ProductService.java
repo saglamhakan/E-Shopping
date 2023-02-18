@@ -4,8 +4,10 @@ import demo.EShopping.requests.AddProductRequest;
 import demo.EShopping.requests.UpdateProductRequest;
 import demo.EShopping.dataAccess.ProductRepository;
 import demo.EShopping.entities.Product;
+import demo.EShopping.responses.GetProductResponse;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,8 +20,24 @@ public class ProductService {
     }
 
 
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public List<GetProductResponse> getAllProducts() {
+
+        List<Product> products=productRepository.findAll();
+        List<GetProductResponse> productResponses=new ArrayList<GetProductResponse>();
+
+        for (Product product:products){
+            GetProductResponse foundProduct= new GetProductResponse(product);
+            foundProduct.setProductName(product.getProductName());
+            foundProduct.setColour(product.getColour());
+            foundProduct.setProductPrice(product.getProductPrice());
+            foundProduct.setUnitInStock(product.getUnitInStock());
+            foundProduct.setCategory(product.getCategory());
+
+            productResponses.add(foundProduct);
+        }
+
+
+        return productResponses;
     }
 
     public Product saveOneProduct(AddProductRequest newCreateProduct) {

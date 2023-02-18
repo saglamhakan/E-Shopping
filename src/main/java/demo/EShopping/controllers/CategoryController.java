@@ -1,10 +1,12 @@
 package demo.EShopping.controllers;
 
+import demo.EShopping.entities.Product;
 import demo.EShopping.requests.AddCategoryRequest;
 import demo.EShopping.requests.UpdateCategoryRequest;
 import demo.EShopping.entities.Category;
 import demo.EShopping.exception.CategoryNotFoundException;
 import demo.EShopping.responses.GetCategoryResponse;
+import demo.EShopping.responses.GetProductResponse;
 import demo.EShopping.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +24,7 @@ public class CategoryController {
     }
 
     @GetMapping("/getAll")
-    public List<Category> getAllCategory(){
+    public List<GetCategoryResponse> getAllCategory(){
         return categoryService.getAllCategory();
     }
 
