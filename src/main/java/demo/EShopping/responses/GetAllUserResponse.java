@@ -1,17 +1,18 @@
 package demo.EShopping.responses;
 
-import demo.EShopping.entities.User;
 import lombok.Data;
 
 @Data
-public class GetUserResponse {
+public class GetAllUserResponse {
 
     private String userName;
 
+    private int age;
+
   //  private int userId;
 
-    public GetUserResponse(User entity){
-        this.userName=entity.getUserName();
+  //  public GetUserResponse(User entity){
+    //    this.userName=entity.getUserName();
       //  this.userId=entity.getUserId();
     }
-}
+

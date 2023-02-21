@@ -75,7 +75,7 @@ public class AuthController {
 
         authResponse.setMessage("User successfully registered");
         authResponse.setAccessToken("Bearer " + jwtToken);
-        authResponse.setUserId(user.getUserId());
+        authResponse.setUserId(authResponse.getUserId());//hata olursa bak
         return new ResponseEntity<>(authResponse, HttpStatus.CREATED);
     }
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class UpdateCategoryRequest {
 
-   // private String categoryId;
+    private Long categoryId;
 
     private String categoryName;
 }

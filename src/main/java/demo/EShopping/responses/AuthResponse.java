@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class AuthResponse {
     String message;
-    int userId;
+    Long userId;
     String accessToken;
 
 }

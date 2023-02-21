@@ -7,6 +7,7 @@ import java.util.Date;
 @Data
 public class AddUserRequest {
 
+    //requestlerden ıd yi sil responselara ekle
     private int userId;
 
     private String userName;

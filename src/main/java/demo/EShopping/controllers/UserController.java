@@ -4,8 +4,8 @@ import demo.EShopping.dataAccess.UserRepository;
 import demo.EShopping.requests.AddUserRequest;
 import demo.EShopping.requests.UpdateUserRequest;
 import demo.EShopping.entities.User;
-import demo.EShopping.exception.UserNotFoundException;
-import demo.EShopping.responses.GetUserResponse;
+import demo.EShopping.responses.GetByIdUserResponse;
+import demo.EShopping.responses.GetAllUserResponse;
 import demo.EShopping.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,17 +27,19 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public GetUserResponse getOneUserById(@PathVariable int userId){
-        User user=userService.getOneUserById(userId);
+    public GetByIdUserResponse findById(@PathVariable int userId){
+        return userService.getById(userId);
+     /*
+        GetByIdUserResponse user=userService.getById(userId);
         if (user==null){
             throw new UserNotFoundException("User not available");
         }
-        return new GetUserResponse(user);
-
+        return new GetByIdUserResponse();
+*/
     }
 
     @GetMapping("/getAll")
-    public List<GetUserResponse> getAllUsers(){
+    public List<GetAllUserResponse> getAllUsers(){
         return this.userService.getAllUsers();
     }
 
@@ -47,8 +49,8 @@ public class UserController {
     }
 
     @PutMapping("{userId}")
-    public User updateOneUser(@PathVariable  int userId, @RequestBody UpdateUserRequest newUser){
-        return userService.updateoneUser(userId,newUser);
+    public void updateOneUser(@PathVariable  int userId, @RequestBody UpdateUserRequest updateUserRequest){
+         userService.updateOneUser(userId, updateUserRequest);
 
     }
 

@@ -1,78 +1,111 @@
 package demo.EShopping.service;
 
+import demo.EShopping.mappers.ModelMapperService;
 import demo.EShopping.requests.AddProductRequest;
 import demo.EShopping.requests.UpdateProductRequest;
 import demo.EShopping.dataAccess.ProductRepository;
 import demo.EShopping.entities.Product;
-import demo.EShopping.responses.GetProductResponse;
+import demo.EShopping.responses.GetAllProductResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    private final ModelMapperService modelMapperService;
+
+    @Autowired
+    public ProductService(ProductRepository productRepository, ModelMapperService modelMapperService) {
         this.productRepository = productRepository;
+        this.modelMapperService=modelMapperService;
     }
 
 
-    public List<GetProductResponse> getAllProducts() {
+    public List<GetAllProductResponse> getAllProducts(Optional<Long> categoryId, Optional<String> categoryName) {
 
-        List<Product> products=productRepository.findAll();
-        List<GetProductResponse> productResponses=new ArrayList<GetProductResponse>();
+        List<Product> list;
 
-        for (Product product:products){
-            GetProductResponse foundProduct= new GetProductResponse(product);
-            foundProduct.setProductName(product.getProductName());
-            foundProduct.setColour(product.getColour());
-            foundProduct.setProductPrice(product.getProductPrice());
-            foundProduct.setUnitInStock(product.getUnitInStock());
-            foundProduct.setCategory(product.getCategory());
+        if (categoryId.isPresent()){
+            list=productRepository.findByCategory_CategoryId(categoryId.get());
+        } else if (categoryName.isPresent()) {
+            list = productRepository.findByCategory_CategoryName(categoryName.get());
 
-            productResponses.add(foundProduct);
+        } else {
+            list=productRepository.findAll();
+        }
+        return list.stream().map(like -> new GetAllProductResponse(like)).collect(Collectors.toList());
+    }
+
+
+
+
+        public Product saveOneProduct (AddProductRequest newCreateProduct){
+
+           // Product toSave = new Product();
+
+            //toSave.setProductName(newCreateProduct.getProductName());
+            //toSave.setProductPrice(newCreateProduct.getProductPrice());
+            //toSave.setColour(newCreateProduct.getColour());
+            //toSave.setUnitInStock(newCreateProduct.getUnitInStock());
+            //toSave.setCategory(newCreateProduct.getCategory());
+
+            Product product=this.modelMapperService.forRequest().map(newCreateProduct,Product.class);
+
+            return productRepository.save(product);
         }
 
+        public void updateOneProducts ( int productId, UpdateProductRequest updateProductRequest){
+          Product product=this.modelMapperService.forRequest().map(updateProductRequest, Product.class);
 
-        return productResponses;
+          productRepository.save(product);
+
+        }
+
+        public void deleteByProductId ( int productId){
+            productRepository.deleteById(productId);
+        }
+
+        public Product getByProductId ( int productId){
+            return productRepository.findById(productId).orElse(null);
+        }
+
     }
 
-    public Product saveOneProduct(AddProductRequest newCreateProduct) {
 
 
-        Product toSave=new Product();
 
-        toSave.setProductName(newCreateProduct.getProductName());
-        toSave.setProductPrice(newCreateProduct.getProductPrice());
-        toSave.setColour(newCreateProduct.getColour());
-        toSave.setUnitInStock(newCreateProduct.getUnitInStock());
-        toSave.setCategory(newCreateProduct.getCategory());
 
-        return productRepository.save(toSave);
+/*  for (Product product:products){
+                GetProductResponse foundProduct= new GetProductResponse(product);
+                foundProduct.setProductName(product.getProductName());
+                foundProduct.setColour(product.getColour());
+                foundProduct.setProductPrice(product.getProductPrice());
+                foundProduct.setUnitInStock(product.getUnitInStock());
+                foundProduct.setCategory(product.getCategory());
+
+                productResponses.add(foundProduct);
+            }
+
+
+            return productResponses;
+
+
+           public List<GetProductResponse> getAllProducts(Optional<Long> categoryId) {
+
+        List<Product> list;
+
+        if (categoryId.isPresent()){
+            list=productRepository.findByCategory_CategoryId(categoryId.get());
+        }else {
+            list=productRepository.findAll();
+        }
+        return list.stream().map(like -> new GetProductResponse(like)).collect(Collectors.toList());
     }
 
-    public Product updateOneProducts(int productId, UpdateProductRequest newProduct) {
-        Optional<Product> product=productRepository.findById(productId);
-        if (product.isPresent()){
-            Product toUpdate=product.get();
-            toUpdate.setProductName(newProduct.getProductName());
-            toUpdate.setProductPrice(newProduct.getProductPrice());
-            toUpdate.setColour(newProduct.getColour());
-            toUpdate.setUnitInStock(newProduct.getUnitInStock());
-            productRepository.save(toUpdate);
-            return toUpdate;
-        }else
-            return null;
-    }
+*/
 
-    public void deleteByProductId(int productId) {
-        productRepository.deleteById(productId);
-    }
 
-    public Product getByProductId(int productId) {
-        return productRepository.findById(productId).orElse(null);
-    }
-}

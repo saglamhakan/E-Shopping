@@ -1,12 +1,11 @@
 package demo.EShopping.controllers;
 
-import demo.EShopping.entities.Product;
 import demo.EShopping.requests.AddCategoryRequest;
 import demo.EShopping.requests.UpdateCategoryRequest;
 import demo.EShopping.entities.Category;
 import demo.EShopping.exception.CategoryNotFoundException;
-import demo.EShopping.responses.GetCategoryResponse;
-import demo.EShopping.responses.GetProductResponse;
+import demo.EShopping.responses.GetAllCategoryResponse;
+import demo.EShopping.responses.GetByIdCategoryResponse;
 import demo.EShopping.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,18 +23,20 @@ public class CategoryController {
     }
 
     @GetMapping("/getAll")
-    public List<GetCategoryResponse> getAllCategory(){
+    public List<GetAllCategoryResponse> getAllCategory(){
         return categoryService.getAllCategory();
     }
 
     @GetMapping("/{categoryId}")
-    public GetCategoryResponse getByCategoryId(@PathVariable int categoryId){
-        Category category=categoryService.getByCategoryId(categoryId);
-        if (category==null){
-            throw new CategoryNotFoundException("Category not available");
+    public GetByIdCategoryResponse getByCategoryId(@PathVariable Long categoryId){
+        return categoryService.getByCategoryId(categoryId);
+
+       // Category category=categoryService.getByCategoryId(categoryId);
+        //if (category==null){
+          //  throw new CategoryNotFoundException("Category not available");
         }
-        return new GetCategoryResponse(category);
-    }
+      //  return new GetAllCategoryResponse();
+  //  }
 
 
     @PostMapping("/add")
@@ -43,12 +44,12 @@ public class CategoryController {
         return categoryService.saveOneCategory(newCategory);
     }
 
-    @PutMapping("/{categoryId}")
-    public Category updateOneCategory(@PathVariable int categoryId, UpdateCategoryRequest newCategory){
-        return categoryService.updateOneCategory(categoryId,newCategory);
+    @PutMapping("{categoryId}")
+    public void updateOneCategory(@RequestBody UpdateCategoryRequest updateCategoryRequest, @PathVariable Long categoryId){
+         categoryService.updateOneCategory(updateCategoryRequest,categoryId);
     }
     @DeleteMapping("/{categoryId}")
-    public void deleteByCategoryId(@PathVariable int categoryId){
+    public void deleteByCategoryId(@PathVariable Long categoryId){
         categoryService.deleteByCategoryId(categoryId);
     }
 }

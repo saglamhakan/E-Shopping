@@ -17,4 +17,6 @@ public class AddProductRequest {
     private String colour;
 
     private Category category;
+
+  //  private int categoryId;
 }

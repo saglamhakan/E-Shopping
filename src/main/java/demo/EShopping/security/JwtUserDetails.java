@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 public class JwtUserDetails implements UserDetails {
 
-    int userId;
+    Long userId;
 
     String username;
 
@@ -25,7 +25,7 @@ public class JwtUserDetails implements UserDetails {
 
     public Collection<? extends GrantedAuthority> Authorities;
 
-    private JwtUserDetails(int userId, String userName, String password,Collection<? extends GrantedAuthority> authorities){
+    private JwtUserDetails(Long userId, String userName, String password,Collection<? extends GrantedAuthority> authorities){
         this.userId=userId;
         this.username=userName;
         this.password=password;

@@ -1,9 +1,9 @@
-package demo.EShopping.requests;
+package demo.EShopping.responses;
 
 import lombok.Data;
 
 @Data
-public class AddCategoryRequest {
+public class GetByIdCategoryResponse {
 
     private Long categoryId;
 
