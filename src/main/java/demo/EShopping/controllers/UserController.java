@@ -27,7 +27,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public GetByIdUserResponse findById(@PathVariable int userId){
+    public GetByIdUserResponse findById(@PathVariable Long userId){
         return userService.getById(userId);
      /*
         GetByIdUserResponse user=userService.getById(userId);
@@ -49,13 +49,13 @@ public class UserController {
     }
 
     @PutMapping("{userId}")
-    public void updateOneUser(@PathVariable  int userId, @RequestBody UpdateUserRequest updateUserRequest){
+    public void updateOneUser(@PathVariable  Long userId, @RequestBody UpdateUserRequest updateUserRequest){
          userService.updateOneUser(userId, updateUserRequest);
 
     }
 
     @DeleteMapping("/{userId}")
-    public void deleteByUserId(@PathVariable int userId){
+    public void deleteByUserId(@PathVariable Long userId){
         userService.deleteByUserId(userId);
     }
 }

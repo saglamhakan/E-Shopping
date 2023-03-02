@@ -9,7 +9,9 @@ public class GetAllUserResponse {
 
     private int age;
 
-  //  private int userId;
+    private Long userId;
+
+    private int birthDate;
 
   //  public GetUserResponse(User entity){
     //    this.userName=entity.getUserName();

@@ -6,6 +6,7 @@ import demo.EShopping.requests.UpdateProductRequest;
 import demo.EShopping.dataAccess.ProductRepository;
 import demo.EShopping.entities.Product;
 import demo.EShopping.responses.GetAllProductResponse;
+import demo.EShopping.rules.ProductBusinessRules;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,64 +17,64 @@ import java.util.stream.Collectors;
 public class ProductService {
     private final ProductRepository productRepository;
 
+    private final ProductBusinessRules productBusinessRules;
     private final ModelMapperService modelMapperService;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, ModelMapperService modelMapperService) {
+    public ProductService(ProductRepository productRepository, ModelMapperService modelMapperService, ProductBusinessRules productBusinessRules) {
         this.productRepository = productRepository;
-        this.modelMapperService=modelMapperService;
+        this.modelMapperService = modelMapperService;
+        this.productBusinessRules = productBusinessRules;
+
     }
 
 
     public List<GetAllProductResponse> getAllProducts(Optional<Long> categoryId, Optional<String> categoryName) {
 
         List<Product> list;
-
-        if (categoryId.isPresent()){
-            list=productRepository.findByCategory_CategoryId(categoryId.get());
+        if (categoryId.isPresent()) {
+            list = productRepository.findByCategory_CategoryId(categoryId.get());
         } else if (categoryName.isPresent()) {
             list = productRepository.findByCategory_CategoryName(categoryName.get());
-
         } else {
-            list=productRepository.findAll();
+            list = productRepository.findAll();
         }
-        return list.stream().map(like -> new GetAllProductResponse(like)).collect(Collectors.toList());
+        return list.stream().map(product -> new GetAllProductResponse(product)).collect(Collectors.toList());
+
     }
 
+    public Product saveOneProduct(AddProductRequest newCreateProduct) {
+        this.productBusinessRules.productName(newCreateProduct.getProductName());
 
+        // Product toSave = new Product();
 
+        //toSave.setProductName(newCreateProduct.getProductName());
+        //toSave.setProductPrice(newCreateProduct.getProductPrice());
+        //toSave.setColour(newCreateProduct.getColour());
+        //toSave.setUnitInStock(newCreateProduct.getUnitInStock());
+        //toSave.setCategory(newCreateProduct.getCategory());
 
-        public Product saveOneProduct (AddProductRequest newCreateProduct){
+        Product product = this.modelMapperService.forRequest().map(newCreateProduct, Product.class);
 
-           // Product toSave = new Product();
+        return productRepository.save(product);
+    }
 
-            //toSave.setProductName(newCreateProduct.getProductName());
-            //toSave.setProductPrice(newCreateProduct.getProductPrice());
-            //toSave.setColour(newCreateProduct.getColour());
-            //toSave.setUnitInStock(newCreateProduct.getUnitInStock());
-            //toSave.setCategory(newCreateProduct.getCategory());
+    public void updateOneProducts(int productId, UpdateProductRequest updateProductRequest) {
+        Product product = this.modelMapperService.forRequest().map(updateProductRequest, Product.class);
 
-            Product product=this.modelMapperService.forRequest().map(newCreateProduct,Product.class);
-
-            return productRepository.save(product);
-        }
-
-        public void updateOneProducts ( int productId, UpdateProductRequest updateProductRequest){
-          Product product=this.modelMapperService.forRequest().map(updateProductRequest, Product.class);
-
-          productRepository.save(product);
-
-        }
-
-        public void deleteByProductId ( int productId){
-            productRepository.deleteById(productId);
-        }
-
-        public Product getByProductId ( int productId){
-            return productRepository.findById(productId).orElse(null);
-        }
+        productRepository.save(product);
 
     }
+
+    public void deleteByProductId(int productId) {
+        productRepository.deleteById(productId);
+    }
+
+    public Product getByProductId(int productId) {
+        return productRepository.findById(productId).orElse(null);
+    }
+
+}
 
 
 

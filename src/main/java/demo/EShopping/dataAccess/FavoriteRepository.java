@@ -1,6 +1,7 @@
 package demo.EShopping.dataAccess;
 
 import demo.EShopping.entities.Favorites;
+import demo.EShopping.responses.GetAllFavoriteResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +12,6 @@ public interface FavoriteRepository extends JpaRepository<Favorites, Long> {
 
 
     List<Favorites> findByUser_UserId(Long userId);
+
+
 }

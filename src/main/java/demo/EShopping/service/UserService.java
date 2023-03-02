@@ -7,11 +7,11 @@ import demo.EShopping.dataAccess.UserRepository;
 import demo.EShopping.entities.User;
 import demo.EShopping.responses.GetByIdUserResponse;
 import demo.EShopping.responses.GetAllUserResponse;
+import demo.EShopping.rules.UserBusinessRules;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,40 +20,36 @@ public class UserService {
 
     private ModelMapperService modelMapperService;
 
+    private UserBusinessRules userBusinessRules;
+
     @Autowired
-    public UserService(UserRepository userRepository, ModelMapperService modelMapperService) {
+    public UserService(UserRepository userRepository, ModelMapperService modelMapperService, UserBusinessRules userBusinessRules) {
         this.userRepository = userRepository;
         this.modelMapperService=modelMapperService;
+        this.userBusinessRules=userBusinessRules;
     }
 
     public User saveOneUser(AddUserRequest newUser) {
-
-      //  User toSave=new User();
-        //toSave.setUserId(newUser.getUserId());
-        //toSave.setUserName(newUser.getUserName());
-        //toSave.setPassword(newUser.getPassword());
-        //toSave.setEmail(newUser.getEmail());
-        //toSave.setAge(newUser.getAge());
-        //toSave.setBirthDate(newUser.getBirthDate());
-
+        this.userBusinessRules.existsByUserName(newUser.getUserName());
+        this.userBusinessRules.existsByEmail(newUser.getEmail());
+        this.userBusinessRules.addPassword(newUser.getPassword());
         User user=this.modelMapperService.forRequest().map(newUser, User.class);
-
 
         return userRepository.save(user);
 
     }
 
-    public void updateOneUser(int userId, UpdateUserRequest updateUserRequest) {
+    public void updateOneUser(Long userId, UpdateUserRequest updateUserRequest) {
         User user=this.modelMapperService.forRequest().map(updateUserRequest,User.class);
          userRepository.save(user);
 
     }
 
-    public void deleteByUserId(int userId) {
+    public void deleteByUserId(Long userId) {
         userRepository.deleteById(userId);
     }
 
-    public GetByIdUserResponse getById(int userId) {
+    public GetByIdUserResponse getById(Long userId) {
 
         User user=userRepository.findById(userId).orElseThrow();
 

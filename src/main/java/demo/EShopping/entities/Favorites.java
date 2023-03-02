@@ -17,8 +17,6 @@ public class Favorites {
 
     private Long favoriteId;
 
-
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
     @OnDelete(action = OnDeleteAction.CASCADE)

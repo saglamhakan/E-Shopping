@@ -19,7 +19,7 @@ public class Category {
     private Long categoryId;
     private String categoryName;
 
-  //  @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
+   // @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
     //private List<Product> products;
 
 }

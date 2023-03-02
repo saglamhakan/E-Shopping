@@ -7,12 +7,12 @@ import demo.EShopping.dataAccess.CategoryRepository;
 import demo.EShopping.entities.Category;
 import demo.EShopping.responses.GetAllCategoryResponse;
 import demo.EShopping.responses.GetByIdCategoryResponse;
+import demo.EShopping.rules.CategoryBusinessRules;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,10 +22,13 @@ public class CategoryService {
 
     private final ModelMapperService modelMapperService;
 
+    private final CategoryBusinessRules categoryBusinessRules;
+
     @Autowired
-    public CategoryService(CategoryRepository categoryRepository, ModelMapperService modelMapperService) {
+    public CategoryService(CategoryRepository categoryRepository, ModelMapperService modelMapperService, CategoryBusinessRules categoryBusinessRules) {
         this.categoryRepository = categoryRepository;
         this.modelMapperService = modelMapperService;
+        this.categoryBusinessRules=categoryBusinessRules;
     }
 
 
@@ -43,11 +46,7 @@ public class CategoryService {
 
 
     public Category saveOneCategory(AddCategoryRequest newCategory) {
-
-      //  Category toSave = new Category();
-        //toSave.setCategoryName(newCategory.getCategoryName());
-        //toSave.setCategoryId(newCategory.getCategoryId());
-
+        this.categoryBusinessRules.categoryName(newCategory.getCategoryName());
         Category category=this.modelMapperService.forRequest().map(newCategory, Category.class);
         return categoryRepository.save(category);
     }
@@ -65,7 +64,6 @@ public class CategoryService {
     }
 
     public GetByIdCategoryResponse getByCategoryId(Long categoryId) {
-
         Category category=categoryRepository.findById(categoryId).orElseThrow();
 
         GetByIdCategoryResponse categoryResponse=this.modelMapperService.forResponse().map(category,GetByIdCategoryResponse.class);

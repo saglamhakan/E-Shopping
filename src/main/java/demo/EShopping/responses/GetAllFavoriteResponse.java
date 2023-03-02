@@ -1,6 +1,6 @@
 package demo.EShopping.responses;
 
-import demo.EShopping.entities.Favorites;
+
 import lombok.Data;
 
 @Data
