@@ -48,9 +48,7 @@ public class UserService {
     public void deleteByUserId(Long userId) {
         userRepository.deleteById(userId);
     }
-
     public GetByIdUserResponse getById(Long userId) {
-
         User user=userRepository.findById(userId).orElseThrow();
 
         GetByIdUserResponse userResponse=this.modelMapperService.forResponse().map(user,GetByIdUserResponse.class);

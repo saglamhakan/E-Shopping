@@ -14,7 +14,7 @@ import java.util.Optional;
 @RequestMapping("/favorites")
 public class FavoriteController {
 
-    private FavoriteService favoriteservice;
+    private final FavoriteService favoriteservice;
 
     @Autowired
     FavoriteController(FavoriteService favoriteservice){

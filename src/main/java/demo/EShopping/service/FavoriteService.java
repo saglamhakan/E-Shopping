@@ -46,6 +46,7 @@ public class FavoriteService {
 
 
     public Favorites save(AddFavoriteRequest addFavoriteRequest) {
+
         Favorites favorites = this.modelMapperService.forRequest().map(addFavoriteRequest, Favorites.class);
 
         return this.favoriteRepository.save(favorites);
