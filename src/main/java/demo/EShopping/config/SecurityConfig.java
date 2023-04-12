@@ -24,9 +24,9 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private UserDetailsServiceImp userDetailsService;
+    private final UserDetailsServiceImp userDetailsService;
 
-    private JwtAuthenticationEntryPoint handler;
+    private final JwtAuthenticationEntryPoint handler;
 
     @Autowired
     public SecurityConfig(UserDetailsServiceImp userDetailsService, JwtAuthenticationEntryPoint handler) {

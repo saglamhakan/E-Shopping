@@ -41,7 +41,7 @@ public class UserService {
 
     public void updateOneUser(Long userId, UpdateUserRequest updateUserRequest) {
         User user=this.modelMapperService.forRequest().map(updateUserRequest,User.class);
-         userRepository.save(user);
+        userRepository.save(user);
 
     }
 

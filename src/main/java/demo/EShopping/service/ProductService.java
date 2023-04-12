@@ -61,7 +61,6 @@ public class ProductService {
 
     public void updateOneProducts(int productId, UpdateProductRequest updateProductRequest) {
         Product product = this.modelMapperService.forRequest().map(updateProductRequest, Product.class);
-
         productRepository.save(product);
 
     }
