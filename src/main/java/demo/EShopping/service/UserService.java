@@ -1,5 +1,6 @@
 package demo.EShopping.service;
 
+import demo.EShopping.exception.BusinessException;
 import demo.EShopping.mappers.ModelMapperService;
 import demo.EShopping.requests.AddUserRequest;
 import demo.EShopping.requests.UpdateUserRequest;
@@ -9,9 +10,11 @@ import demo.EShopping.responses.GetByIdUserResponse;
 import demo.EShopping.responses.GetAllUserResponse;
 import demo.EShopping.rules.UserBusinessRules;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,9 +42,19 @@ public class UserService {
 
     }
 
-    public void updateOneUser(Long userId, UpdateUserRequest updateUserRequest) {
-        User user=this.modelMapperService.forRequest().map(updateUserRequest,User.class);
-        userRepository.save(user);
+    public User updateOneUser(Long userId, UpdateUserRequest updateUserRequest) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (Objects.nonNull(user)){
+            user.setUserName(updateUserRequest.getUserName());
+            user.setEmail(updateUserRequest.getEmail());
+            user.setPassword(updateUserRequest.getPassword());
+            user.setAge(updateUserRequest.getAge());
+            user.setBirthDate(updateUserRequest.getBirthDate());
+            userRepository.save(user);
+            return user;
+        }
+
+        throw new UsernameNotFoundException("User could not found");
 
     }
 

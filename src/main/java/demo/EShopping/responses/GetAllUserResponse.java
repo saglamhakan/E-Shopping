@@ -2,6 +2,8 @@ package demo.EShopping.responses;
 
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class GetAllUserResponse {
 
@@ -11,7 +13,7 @@ public class GetAllUserResponse {
 
     private Long userId;
 
-    private int birthDate;
+    private Date birthDate;
 
   //  public GetUserResponse(User entity){
     //    this.userName=entity.getUserName();

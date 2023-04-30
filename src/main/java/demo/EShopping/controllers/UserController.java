@@ -16,14 +16,12 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    private UserService userService;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Autowired
-    public UserController(UserService userservice,
-                          UserRepository userRepository){
+    public UserController(UserService userservice){
         this.userService=userservice;
-        this.userRepository = userRepository;
+
     }
 
     @GetMapping("/{userId}")
@@ -49,8 +47,8 @@ public class UserController {
     }
 
     @PutMapping("{userId}")
-    public void updateOneUser(@PathVariable  Long userId, @RequestBody UpdateUserRequest updateUserRequest){
-         userService.updateOneUser(userId, updateUserRequest);
+    public User updateOneUser(@PathVariable  Long userId, @RequestBody UpdateUserRequest updateUserRequest){
+        return userService.updateOneUser(userId, updateUserRequest);
 
     }
 

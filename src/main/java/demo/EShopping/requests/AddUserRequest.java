@@ -8,7 +8,6 @@ import java.util.Date;
 public class AddUserRequest {
 
     //requestlerden ıd yi sil responselara ekle
-    private int userId;
 
     private String userName;
 
@@ -16,7 +15,7 @@ public class AddUserRequest {
 
     private String email;
 
-   private int birthDate;
+   private Date birthDate;
 
    private int age;
 }

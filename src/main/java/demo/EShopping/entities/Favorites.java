@@ -14,7 +14,6 @@ public class Favorites {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long favoriteId;
 
     @ManyToOne(fetch = FetchType.EAGER)

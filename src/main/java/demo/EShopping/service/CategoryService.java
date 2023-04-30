@@ -36,12 +36,9 @@ public class CategoryService {
 
         List<Category> categories = categoryRepository.findAll();
 
-        List<GetAllCategoryResponse> categoryResponses = (List<GetAllCategoryResponse>) categories.stream().
+        return (List<GetAllCategoryResponse>) categories.stream().
                 map(category -> this.modelMapperService.forResponse()
                 .map(category, GetAllCategoryResponse.class)).collect(Collectors.toList());
-
-
-        return categoryResponses;
     }
 
 
@@ -52,7 +49,6 @@ public class CategoryService {
     }
 
     public void updateOneCategory( UpdateCategoryRequest updateCategoryRequest, Long categoryId) {
-
         Category category=this.modelMapperService.forRequest().map(updateCategoryRequest,Category.class);
         categoryRepository.save(category);
 
@@ -71,7 +67,7 @@ public class CategoryService {
     }
 }
 /*
- new ArrayList<GetCategoryResponse>();
+ new ArrayList<GetAllCategoryResponse>();
 
         for (Category category:categories){
             GetCategoryResponse foundCategory=new GetCategoryResponse(category);

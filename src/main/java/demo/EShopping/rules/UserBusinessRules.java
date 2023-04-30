@@ -1,6 +1,7 @@
 package demo.EShopping.rules;
 
 import demo.EShopping.dataAccess.UserRepository;
+import demo.EShopping.exception.BusinessException;
 import demo.EShopping.exception.UserNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +23,13 @@ public class UserBusinessRules {
 
     public void existsByEmail(String email){
         if (this.userRepository.existsByEmail(email)){
-            throw new UserNotFoundException("Email already available");
+            throw new BusinessException("Email already available");
         }
     }
 
     public void addPassword(String password){
         if (password.length()<5){
-            throw new UserNotFoundException("password cannot be less than 5 characters");
+            throw new BusinessException("password cannot be less than 5 characters");
         }
     }
 }

@@ -1,5 +1,6 @@
 package demo.EShopping.service;
 
+import demo.EShopping.exception.ProductNotFoundException;
 import demo.EShopping.mappers.ModelMapperService;
 import demo.EShopping.requests.AddProductRequest;
 import demo.EShopping.requests.UpdateProductRequest;
@@ -20,26 +21,29 @@ public class ProductService {
     private final ProductBusinessRules productBusinessRules;
     private final ModelMapperService modelMapperService;
 
+
     @Autowired
-    public ProductService(ProductRepository productRepository, ModelMapperService modelMapperService, ProductBusinessRules productBusinessRules) {
+    public ProductService(ProductRepository productRepository, ModelMapperService modelMapperService,
+                          ProductBusinessRules productBusinessRules) {
         this.productRepository = productRepository;
         this.modelMapperService = modelMapperService;
         this.productBusinessRules = productBusinessRules;
 
-    }
 
+    }
 
     public List<GetAllProductResponse> getAllProducts(Optional<Long> categoryId, Optional<String> categoryName) {
 
-        List<Product> list;
-        if (categoryId.isPresent()) {
-            list = productRepository.findByCategory_CategoryId(categoryId.get());
+        List<Product> products;
+        if (categoryId.isPresent() && categoryName.isPresent()) {
+            products = productRepository.findByCategory_CategoryIdAndCategory_CategoryName(categoryId.get(), categoryName.get());
+        } else if (categoryId.isPresent()) {
+            products = productRepository.findByCategory_CategoryId(categoryId.get());
         } else if (categoryName.isPresent()) {
-            list = productRepository.findByCategory_CategoryName(categoryName.get());
-        } else {
-            list = productRepository.findAll();
-        }
-        return list.stream().map(product -> new GetAllProductResponse(product)).collect(Collectors.toList());
+            products = productRepository.findByCategory_CategoryName(categoryName.get());
+        } else
+            products = productRepository.findAll();
+        return products.stream().map(product -> new GetAllProductResponse(product)).collect(Collectors.toList());
 
     }
 
@@ -62,15 +66,19 @@ public class ProductService {
     public void updateOneProducts(int productId, UpdateProductRequest updateProductRequest) {
         Product product = this.modelMapperService.forRequest().map(updateProductRequest, Product.class);
         productRepository.save(product);
-
     }
 
     public void deleteByProductId(int productId) {
         productRepository.deleteById(productId);
     }
 
-    public Product getByProductId(int productId) {
-        return productRepository.findById(productId).orElse(null);
+    public GetAllProductResponse getByProductId(int productId) {
+        Product product = productRepository.findById(productId).orElse(null);
+        if (product == null) {
+            throw new ProductNotFoundException("Product not available");
+        }
+        return new GetAllProductResponse(product);
+
     }
 
 }
