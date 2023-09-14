@@ -1,7 +1,10 @@
 package demo.EShopping.service;
 
+import demo.EShopping.dataAccess.CategoryRepository;
+import demo.EShopping.entities.Category;
+import demo.EShopping.exception.BusinessException;
 import demo.EShopping.exception.ProductNotFoundException;
-import demo.EShopping.mappers.ModelMapperService;
+import demo.EShopping.mappers.ModelMapperManager;
 import demo.EShopping.requests.AddProductRequest;
 import demo.EShopping.requests.UpdateProductRequest;
 import demo.EShopping.dataAccess.ProductRepository;
@@ -19,17 +22,16 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     private final ProductBusinessRules productBusinessRules;
-    private final ModelMapperService modelMapperService;
+    private final ModelMapperManager modelMapperManager;
+
 
 
     @Autowired
-    public ProductService(ProductRepository productRepository, ModelMapperService modelMapperService,
+    public ProductService(ProductRepository productRepository, ModelMapperManager modelMapperManager,
                           ProductBusinessRules productBusinessRules) {
         this.productRepository = productRepository;
-        this.modelMapperService = modelMapperService;
+        this.modelMapperManager = modelMapperManager;
         this.productBusinessRules = productBusinessRules;
-
-
     }
 
     public List<GetAllProductResponse> getAllProducts(Optional<Long> categoryId, Optional<String> categoryName) {
@@ -49,6 +51,8 @@ public class ProductService {
 
     public Product saveOneProduct(AddProductRequest newCreateProduct) {
         this.productBusinessRules.productName(newCreateProduct.getProductName());
+        this.productBusinessRules.existProductName(newCreateProduct.getProductName());
+        this.productBusinessRules.productPrice(newCreateProduct.getProductPrice());
 
         // Product toSave = new Product();
 
@@ -58,15 +62,24 @@ public class ProductService {
         //toSave.setUnitInStock(newCreateProduct.getUnitInStock());
         //toSave.setCategory(newCreateProduct.getCategory());
 
-        Product product = this.modelMapperService.forRequest().map(newCreateProduct, Product.class);
+        Product product = this.modelMapperManager.forRequest().map(newCreateProduct, Product.class);
 
         return productRepository.save(product);
     }
 
-    public void updateOneProducts(int productId, UpdateProductRequest updateProductRequest) {
-        Product product = this.modelMapperService.forRequest().map(updateProductRequest, Product.class);
+  /*  public void updateOneProducts(int productId, UpdateProductRequest updateProductRequest) {
+        Product product = productRepository.findById(productId).orElse(null);
+        if (Objects.nonNull(product)) {
+            product.setProductName(updateProductRequest.getProductName());
+            product.setColour(updateProductRequest.getColour());
+            product.setProductPrice(updateProductRequest.getProductPrice());
+            product.setUnitInStock(updateProductRequest.getUnitInStock());
+            product.setCategory(updateProductRequest.getCategory());
+        }
         productRepository.save(product);
     }
+
+   */
 
     public void deleteByProductId(int productId) {
         productRepository.deleteById(productId);
@@ -81,6 +94,19 @@ public class ProductService {
 
     }
 
+    public List<GetAllProductResponse> getById(Long categoryId) {
+        List<Product> products;
+   if (categoryId == null){
+       throw new BusinessException("Category not found");
+   }else{
+       products = productRepository.findByCategory_CategoryId(categoryId);
+       return  products.stream().map(product -> new GetAllProductResponse(product)).collect(Collectors.toList());
+
+
+
+   }
+
+    }
 }
 
 

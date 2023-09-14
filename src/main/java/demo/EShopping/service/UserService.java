@@ -1,6 +1,7 @@
 package demo.EShopping.service;
 
-import demo.EShopping.exception.BusinessException;
+import demo.EShopping.dataAccess.RoleRepository;
+import demo.EShopping.entities.Role;
 import demo.EShopping.mappers.ModelMapperService;
 import demo.EShopping.requests.AddUserRequest;
 import demo.EShopping.requests.UpdateUserRequest;
@@ -11,10 +12,13 @@ import demo.EShopping.responses.GetAllUserResponse;
 import demo.EShopping.rules.UserBusinessRules;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +30,11 @@ public class UserService {
     private UserBusinessRules userBusinessRules;
 
     @Autowired
+    RoleRepository roleRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
     public UserService(UserRepository userRepository, ModelMapperService modelMapperService, UserBusinessRules userBusinessRules) {
         this.userRepository = userRepository;
         this.modelMapperService=modelMapperService;
@@ -33,7 +42,7 @@ public class UserService {
     }
 
     public User saveOneUser(AddUserRequest newUser) {
-        this.userBusinessRules.existsByUserName(newUser.getUserName());
+        this.userBusinessRules.existsByUsername(newUser.getUsername());
         this.userBusinessRules.existsByEmail(newUser.getEmail());
         this.userBusinessRules.addPassword(newUser.getPassword());
         User user=this.modelMapperService.forRequest().map(newUser, User.class);
@@ -45,11 +54,8 @@ public class UserService {
     public User updateOneUser(Long userId, UpdateUserRequest updateUserRequest) {
         User user = userRepository.findById(userId).orElse(null);
         if (Objects.nonNull(user)){
-            user.setUserName(updateUserRequest.getUserName());
             user.setEmail(updateUserRequest.getEmail());
             user.setPassword(updateUserRequest.getPassword());
-            user.setAge(updateUserRequest.getAge());
-            user.setBirthDate(updateUserRequest.getBirthDate());
             userRepository.save(user);
             return user;
         }
@@ -61,6 +67,7 @@ public class UserService {
     public void deleteByUserId(Long userId) {
         userRepository.deleteById(userId);
     }
+
     public GetByIdUserResponse getById(Long userId) {
         User user=userRepository.findById(userId).orElseThrow();
 
@@ -81,7 +88,24 @@ public class UserService {
     }
 
     public User getOneUserByUserName(String userName) {
-        return userRepository.findByUserName(userName);
+        return userRepository.findByUsername(userName);
+    }
+
+    public void saveUserByRole(User user, String roleName) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Set<Role> roles = new HashSet<>();
+        Role role = roleRepository.findByName(roleName);
+
+        if (role == null) {
+            role = new Role();
+            role.setName(roleName);
+            role.setDescription(roleName + " description");
+            role = roleRepository.save(role);
+        }
+
+        roles.add(role);
+        user.setRoles(roles);
+        userRepository.save(user);
     }
 
 

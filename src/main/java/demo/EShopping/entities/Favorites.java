@@ -1,11 +1,11 @@
 package demo.EShopping.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.*;
 
 @Data
 @Entity
@@ -17,7 +17,7 @@ public class Favorites {
     private Long favoriteId;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Product product;

@@ -6,7 +6,6 @@ import lombok.Data;
 @Data
 public class AddProductRequest {
 
-    private int productId;
 
     private String productName;
 
@@ -16,7 +15,7 @@ public class AddProductRequest {
 
     private String colour;
 
-    private Category category;
+    private Long categoryId;
 
   //  private int categoryId;
 }

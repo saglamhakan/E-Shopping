@@ -9,14 +9,14 @@ public class AddUserRequest {
 
     //requestlerden ıd yi sil responselara ekle
 
-    private String userName;
+    private String username;
 
     private String password;
 
     private String email;
 
-   private Date birthDate;
+    private Date birthDate;
 
-   private int age;
+    private int age;
 }
 

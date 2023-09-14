@@ -3,10 +3,8 @@ package demo.EShopping.controllers;
 import demo.EShopping.requests.AddProductRequest;
 import demo.EShopping.requests.UpdateProductRequest;
 import demo.EShopping.entities.Product;
-import demo.EShopping.exception.ProductNotFoundException;
 import demo.EShopping.responses.GetAllProductResponse;
 import demo.EShopping.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,12 +12,12 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/products")
+@CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping("products")
 public class ProductController {
 
     private final ProductService productService;
 
-    @Autowired
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
@@ -30,23 +28,31 @@ public class ProductController {
         return productService.getAllProducts(categoryId,categoryName);
     }
 
-    @GetMapping("/{productId}")
-    public ResponseEntity<GetAllProductResponse> getProductById(@PathVariable int productId){
-       return ResponseEntity.ok(productService.getByProductId(productId));
+    @GetMapping("/{id}")
+    public ResponseEntity<GetAllProductResponse> getProductById(@PathVariable int id){
+       return ResponseEntity.ok(productService.getByProductId(id));
     }
 
     @PostMapping("/add")
     public Product createOneProducts(@RequestBody AddProductRequest newCreateProduct){
         return productService.saveOneProduct(newCreateProduct);
     }
-    @PutMapping("/{productId}")
+  /*  @PutMapping("/{productId}")
     public void updateOneProducts(@PathVariable int productId, @RequestBody UpdateProductRequest updateProductRequest){
           productService.updateOneProducts(productId,updateProductRequest);
     }
 
-    @DeleteMapping("/{productId}")
-    public void deleteByProductId(@PathVariable int productId){
-        productService.deleteByProductId(productId);
+   */
+
+    @DeleteMapping("/{id}")
+    public void deleteByProductId(@PathVariable int id){
+        productService.deleteByProductId(id);
+    }
+
+    @GetMapping("/getByCategory")
+    public List<GetAllProductResponse> getById(@RequestParam Long categoryId){
+        return productService.getById(categoryId);
+
     }
 
 

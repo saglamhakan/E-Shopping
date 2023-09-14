@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,7 +50,11 @@ public class CategoryService {
     }
 
     public void updateOneCategory( UpdateCategoryRequest updateCategoryRequest, Long categoryId) {
-        Category category=this.modelMapperService.forRequest().map(updateCategoryRequest,Category.class);
+        Category category = categoryRepository.findById(categoryId).orElse(null);
+
+        if (Objects.nonNull(category)){
+            category.setCategoryName(updateCategoryRequest.getCategoryName());
+        }
         categoryRepository.save(category);
 
     }

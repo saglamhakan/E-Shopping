@@ -1,11 +1,11 @@
 package demo.EShopping.requests;
 
+import demo.EShopping.entities.Category;
 import lombok.Data;
 
 @Data
 public class UpdateProductRequest {
 
-    private int productId;
 
     private String productName;
 
@@ -15,9 +15,7 @@ public class UpdateProductRequest {
 
     private int unitInStock;
 
-    private int categoryId;
-
-
+    private Category category;
 
 
 }

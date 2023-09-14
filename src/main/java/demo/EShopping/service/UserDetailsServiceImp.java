@@ -1,33 +1,21 @@
 package demo.EShopping.service;
 
+import demo.EShopping.dataAccess.RoleRepository;
 import demo.EShopping.dataAccess.UserRepository;
+import demo.EShopping.entities.Role;
 import demo.EShopping.entities.User;
-import demo.EShopping.security.JwtUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-@Service
-public class UserDetailsServiceImp implements UserDetailsService {
+import java.util.HashSet;
+import java.util.Set;
 
-    private final UserRepository userRepository;
-
-    @Autowired
-    public UserDetailsServiceImp(UserRepository userRepository){
-        this.userRepository=userRepository;
-    }
+public class UserDetailsServiceImp  {
 
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user=userRepository.findByUserName(username);
-        return JwtUserDetails.create(user);
-    }
 
-    public UserDetails loadUserById(Long id){
-        User user=userRepository.findById(id).get();
-        return JwtUserDetails.create(user);
-    }
 }

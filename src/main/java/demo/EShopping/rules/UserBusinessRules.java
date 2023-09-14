@@ -14,8 +14,8 @@ public class UserBusinessRules {
     @Autowired
     private UserRepository userRepository;
 
-    public void existsByUserName(String userName){
-        if (this.userRepository.existsByUserName(userName)){
+    public void existsByUsername(String username){
+        if (this.userRepository.existsByUsername(username)){
             throw new UserNotFoundException("User already available");
         }
 

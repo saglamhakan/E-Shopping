@@ -7,9 +7,8 @@ import lombok.Data;
 @Data
 public class AddFavoriteRequest {
 
-    private Long favoriteId;
 
-    private int productId;
+    private int id;
 
     private Long userId;
 
